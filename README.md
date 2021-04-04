@@ -1,4 +1,4 @@
-# G2L: global to local search
+# G2L: global to local search for receptive fields (dilation rates)
 
 The official implemention of the CVPR2021 paper: 'Global2Local: Efficient Structure Search for Video Action Segmentation'
 ## Introduction
