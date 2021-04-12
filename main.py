@@ -82,7 +82,7 @@ if __name__ == '__main__':
     cfg = load_config(args.config, finetune=args.finetune)
     searcher = Searcher(cfg, trainer.model)
     searcher.set_model(trainer.model, cfg, search_op='Conv1d')
-    if args.action == 'train':
+    if args.action == 'train' and not args.finetune:
         searcher.wrap_model(trainer.model, cfg, search_op='Conv1d')
     
     print(trainer.model)
