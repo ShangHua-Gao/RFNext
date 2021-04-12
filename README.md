@@ -30,7 +30,7 @@ python main.py --dataset=breakfast --split=1 --action=train --config='breakfast_
 ```
 Then, training the model from the searched structures.
 ```py
-python main.py --dataset=breakfast --split=1 --action=train --config='path to config (default as 'log/search_config_step30.json')' --tmp=results
+python main.py --dataset=breakfast --split=1 --action=train --config='path to config (default as 'log/search_config_step30.json')' --tmp=results --finetune=True
 ```
 
 ### Testing:
