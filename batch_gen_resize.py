@@ -18,8 +18,15 @@ class SegDataset(Dataset):
         file_ptr = open(vid, 'r')
         self.list_of_examples = file_ptr.read().split('\n')[:-1]
         file_ptr.close()
-
-        self.mask = torch.ones(self.num_classes, 2000, dtype=torch.float)
+    
+        if '50salads' in gt_path:
+            self.fix_size = 5000
+        elif 'breakfast' in gt_path:
+            self.fix_size = 2000
+        elif 'gtea' in gt_path:
+            self.fix_size = 1000
+            
+        self.mask = torch.ones(self.num_classes, self.fix_size, dtype=torch.float)
 
 
     def __getitem__(self, idx):
@@ -45,8 +52,8 @@ class SegDataset(Dataset):
             batch_input = torch.from_numpy(batch_input)
             batch_target = torch.from_numpy(batch_target)
 
-            batch_input = torch.nn.functional.interpolate(batch_input.unsqueeze(0), size=5000, mode='nearest').squeeze()
-            batch_target = torch.nn.functional.interpolate(batch_target.unsqueeze(0).unsqueeze(0), size=5000, mode='nearest').squeeze().long()
+            batch_input = torch.nn.functional.interpolate(batch_input.unsqueeze(0), size=self.fix_size, mode='nearest').squeeze()
+            batch_target = torch.nn.functional.interpolate(batch_target.unsqueeze(0).unsqueeze(0), size=self.fix_size, mode='nearest').squeeze().long()
 
             np.save(self.features_path + batch.split('.')[0] + '_fix', batch_input.numpy())
             np.save(self.features_path + batch.split('.')[0] + '_fix_label', batch_target.numpy())
