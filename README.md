@@ -4,7 +4,8 @@ A general receptive field searching method for CNN.
 The official implemention of the CVPR2021 paper: 'Global2Local: Efficient Structure Search for Video Action Segmentation'
 
 ## News
-- G2L search helps to achieve the 1st place ([Team Feedback](https://github.com/hlh981029/megcup-feedback)) in [2022 MegCup RAW image denoising](https://studio.brainpp.com/competition/5?name=2022%20MegCup%20%E7%82%BC%E4%B8%B9%E5%A4%A7%E8%B5%9B&tab=rank).
+- 2022.4.24 G2L search helps to achieve the 1st place ([Team Feedback](https://github.com/hlh981029/megcup-feedback)) in [2022 MegCup RAW image denoising](https://studio.brainpp.com/competition/5?name=2022%20MegCup%20%E7%82%BC%E4%B8%B9%E5%A4%A7%E8%B5%9B&tab=rank).
+- 2022.2.10 G2L search improve the SOTA CNN model ConvNeXt on multiple tasks.
 
 ## Introduction
 Temporal receptive fields of models play an important
