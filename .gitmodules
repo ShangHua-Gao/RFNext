@@ -1,3 +1,6 @@
 [submodule "RF-mmdetection"]
 	path = RF-mmdetection
 	url = https://github.com/ShangHua-Gao/RF-mmdetection
+[submodule "RF-mmcv"]
+	path = RF-mmcv
+	url = https://github.com/ShangHua-Gao/RF-mmcv/
