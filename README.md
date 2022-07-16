@@ -1,8 +1,9 @@
 # RF-Next: Efficient Receptive Field Search for Convolutional Neural Networks
 
-A general receptive field searching method for CNN.
+A general receptive field searching method for CNN.**If your network has Conv with kernel larger than 1, RF-Next can further improve your model.**
 The official implemention of the TPAMI2022 paper: 'RF-Next: Efficient Receptive Field Search for Convolutional Neural Networks',
 CVPR2021 paper: 'Global2Local: Efficient Structure Search for Video Action Segmentation'
+
 
 ## News
 - 2022.6.11 Code for mmcv and mmdetection is released. ConvNext, PVT, Res2Net, HRNet are supported. [code](https://github.com/ShangHua-Gao/RF-mmdetection/tree/rfsearch/configs/rfnext)
