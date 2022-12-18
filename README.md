@@ -6,6 +6,7 @@ CVPR2021 paper: 'Global2Local: Efficient Structure Search for Video Action Segme
 
 
 ## News
+- 2022.12.18 RF-Next is now in the official repo of [MMCV](https://github.com/open-mmlab/mmcv/tree/master/mmcv/cnn/rfsearch), you can use rf-next in all MMlab codebases.
 - 2022.6.11 Code for mmcv and mmdetection is released. ConvNext, PVT, Res2Net, HRNet are supported. [code](https://github.com/ShangHua-Gao/RF-mmdetection/tree/rfsearch/configs/rfnext)
 - 2022.4.24 RF-Next helps to achieve the 1st place ([Team Feedback](https://github.com/hlh981029/megcup-feedback)) in [2022 MegCup RAW image denoising](https://studio.brainpp.com/competition/5?name=2022%20MegCup%20%E7%82%BC%E4%B8%B9%E5%A4%A7%E8%B5%9B&tab=rank).
 - 2022.2.10 RF-Next improve the SOTA CNN model ConvNeXt on multiple tasks.
