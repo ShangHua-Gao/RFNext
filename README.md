@@ -17,7 +17,7 @@ CVPR2021 paper: 'Global2Local: Efficient Structure Search for Video Action Segme
 ## Introduction
 Temporal/spatial receptive fields of models play an important role in sequential/spatial tasks. Large receptive fields facilitate long-term relations, while small receptive fields help to capture the local details. Existing methods construct models with hand-designed receptive fields in layers. Can we effectively search for receptive field combinations to replace hand-designed patterns? To answer this question, we propose to find better receptive field combinations through a global-to-local search scheme. Our search scheme exploits both global search to find the coarse combinations and local search to get the refined receptive field combinations further. The global search finds possible coarse combinations other than human-designed patterns. On top of the global search, we propose an
 expectation-guided iterative local search scheme to refine combinations effectively. Our RF-Next models, plugging receptive field search to various models, boost the performance on many tasks, e.g., temporal action segmentation, object detection, instance segmentation, and speech synthesis. 
-## Applications
+## Applications and Codes
 RF-Next supports many applications.
 - [Object detection and Instance segmentation in MMDet](https://github.com/ShangHua-Gao/RF-mmdetection/tree/rfsearch/configs/rfnext)
 - [Semantic segmentation in MMSeg](https://github.com/ShangHua-Gao/RF-mmdetection/tree/rfsearch/configs/rfnext
