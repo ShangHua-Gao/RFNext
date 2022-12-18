@@ -5,6 +5,8 @@ The official implementation of the TPAMI2022 paper: 'RF-Next: Efficient Receptiv
 CVPR2021 paper: 'Global2Local: Efficient Structure Search for Video Action Segmentation'
 
 ## News
+- 2022.12.18 [RF-Convnext](https://github.com/ShangHua-Gao/RFNext/blob/main/rfconvnext.py) with [An-easy-to-use RFConv](https://github.com/ShangHua-Gao/RFNext/blob/main/rfconv.py) is released. You can replace the Conv with the RFConv to support dilation rate search for any networks.
+- 
 - 2022.12.18 RF-ConvNext for large-scale semantic segmentation on ImageNet-S [ImageNetSegModel](https://github.com/LUSSeg/ImageNetSegModel/blob/main/MODEL_ZOO.md#finetuning-with-rf-convnext).
 - 2022.12.1 RF-Next is now in the official repo of [MMCV](https://github.com/open-mmlab/mmcv/tree/master/mmcv/cnn/rfsearch), you can use rf-next in all MMlab codebases.
 - 2022.6.11 Code for mmcv and mmdetection is released. ConvNext, PVT, Res2Net, HRNet are supported. [code](https://github.com/ShangHua-Gao/RF-mmdetection/tree/rfsearch/configs/rfnext)
