@@ -20,7 +20,7 @@ expectation-guided iterative local search scheme to refine combinations effectiv
 ## Applications and Codes
 RF-Next supports many applications.
 - [Object detection and Instance segmentation in MMDet](https://github.com/ShangHua-Gao/RF-mmdetection/tree/rfsearch/configs/rfnext)
-- [Semantic segmentation in MMSeg](https://github.com/ShangHua-Gao/RF-mmdetection/tree/rfsearch/configs/rfnext
+- [Semantic segmentation in MMSeg](https://github.com/lzyhha/RF-mmsegmentation/tree/rfsearch
 )
 - [MMCV supports RF-Next](https://github.com/open-mmlab/mmcv/tree/master/mmcv/cnn/rfsearch) 
 - [Action segmentation Method G2L](https://github.com/ShangHua-Gao/RFNext/tree/main/rf-action_segmentation)
