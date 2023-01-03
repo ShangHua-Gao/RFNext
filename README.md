@@ -1,8 +1,11 @@
 # RF-Next: Efficient Receptive Field Search for Convolutional Neural Networks
 
 A general receptive field searching method for CNN.**If your network has Conv with kernel larger than 1, RF-Next can further improve your model.**
-The official implementation of the TPAMI2022 paper: 'RF-Next: Efficient Receptive Field Search for Convolutional Neural Networks',
-CVPR2021 paper: 'Global2Local: Efficient Structure Search for Video Action Segmentation'
+The official implementation of:
+
+TPAMI2022 paper: '[RF-Next: Efficient Receptive Field Search for Convolutional Neural Networks](https://arxiv.org/abs/2206.06637)'
+
+CVPR2021 paper: '[Global2Local: Efficient Structure Search for Video Action Segmentation](https://arxiv.org/abs/2101.00910)'
 
 ## News
 - 2022.12.18 [RF-Convnext](https://github.com/ShangHua-Gao/RFNext/blob/main/rfconvnext.py) with [An-easy-to-use RFConv](https://github.com/ShangHua-Gao/RFNext/blob/main/rfconv.py) is released. You can replace the Conv with the RFConv to support dilation rate search for any networks.
