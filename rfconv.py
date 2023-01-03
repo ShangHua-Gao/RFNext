@@ -28,25 +28,18 @@ def value_crop(dilation, min_dilation, max_dilation):
 
 
 def rf_expand(dilation, expand_rate, num_branches, min_dilation=1, max_dilation=None):
-    large_rates = []
-    small_rates = []
-    for _ in range(num_branches//2):
-        large_rates.append(tuple([value_crop(
-            int(round((1 + expand_rate) * dilation[0])), min_dilation, max_dilation),
-            value_crop(
-            int(round((1 + expand_rate) * dilation[1])), min_dilation, max_dilation)]
-        ))
-        small_rates.append(tuple([value_crop(
-            int(round((1 - expand_rate) * dilation[0])), min_dilation, max_dilation),
-            value_crop(
-            int(round((1 - expand_rate) * dilation[1])), min_dilation, max_dilation)]))
-
-    small_rates.reverse()
-
-    if num_branches % 2 == 0:
-        rate_list = small_rates + large_rates
-    else:
-        rate_list = small_rates + [dilation] + large_rates
+    rate_list = []
+    assert num_branches>=2, "number of branches must >=2"
+    delta_dilation0 = expand_rate * dilation[0]
+    delta_dilation1 = expand_rate * dilation[1]
+    for i in range(num_branches):
+        rate_list.append(
+            tuple([value_crop(
+                int(round(dilation[0] - delta_dilation0 + (i) * 2 * delta_dilation0/(num_branches-1))), min_dilation, max_dilation),
+                value_crop(
+                int(round(dilation[1] - delta_dilation1 + (i) * 2 * delta_dilation1/(num_branches-1))), min_dilation, max_dilation)
+            ])
+        )
 
     unique_rate_list = list(set(rate_list))
     unique_rate_list.sort(key=rate_list.index)
@@ -86,28 +79,31 @@ class RFConv2d(nn.Conv2d):
             if isinstance(stride, int):
                 stride = [stride, stride]
             new_kernel_size = (
-                kernel_size[0] + (max_dliation_rate[0].item() - 1) * (kernel_size[0] // 2) * 2,
-                kernel_size[1] + (max_dliation_rate[1].item() - 1) * (kernel_size[1] // 2) * 2)   
+                kernel_size[0] + (max_dliation_rate[0].item() -
+                                  1) * (kernel_size[0] // 2) * 2,
+                kernel_size[1] + (max_dliation_rate[1].item() - 1) * (kernel_size[1] // 2) * 2)
             # assign dilation to (1, 1) after merge
             new_dilation = (1, 1)
             new_padding = (
-                get_padding(new_kernel_size[0], stride[0], new_dilation[0]), 
+                get_padding(new_kernel_size[0], stride[0], new_dilation[0]),
                 get_padding(new_kernel_size[1], stride[1], new_dilation[1]))
 
             # merge weight of each branch
             old_weight = pretrained['weight']
             new_weight = torch.zeros(
-                size=(old_weight.shape[0], old_weight.shape[1], new_kernel_size[0], new_kernel_size[1]), 
+                size=(old_weight.shape[0], old_weight.shape[1],
+                      new_kernel_size[0], new_kernel_size[1]),
                 dtype=old_weight.dtype)
             for r, rate in enumerate(rates[:num_rates.item()]):
                 rate = (rate[0].item(), rate[1].item())
                 for i in range(- (kernel_size[0] // 2), kernel_size[0] // 2 + 1):
                     for j in range(- (kernel_size[1] // 2), kernel_size[1] // 2 + 1):
-                        new_weight[:, :, 
-                            new_kernel_size[0] // 2 - i * rate[0], 
-                            new_kernel_size[1] // 2 - j * rate[1]] += \
-                                old_weight[:, :, kernel_size[0] // 2 - i, kernel_size[1] // 2 - j] * sample_weights[r]
-            
+                        new_weight[:, :,
+                                   new_kernel_size[0] // 2 - i * rate[0],
+                                   new_kernel_size[1] // 2 - j * rate[1]] += \
+                            old_weight[:, :, kernel_size[0] // 2 - i,
+                                       kernel_size[1] // 2 - j] * sample_weights[r]
+
             kernel_size = new_kernel_size
             padding = new_padding
             dilation = new_dilation
@@ -115,8 +111,9 @@ class RFConv2d(nn.Conv2d):
             pretrained['num_rates'] = torch.IntTensor([1])
             pretrained['weight'] = new_weight
             # re-initilize the sample_weights
-            pretrained['sample_weights'] = pretrained['sample_weights'] * 0.0 + init_weight   
-        
+            pretrained['sample_weights'] = pretrained['sample_weights'] * \
+                0.0 + init_weight
+
         super(RFConv2d, self).__init__(
             in_channels,
             out_channels,
@@ -140,10 +137,11 @@ class RFConv2d(nn.Conv2d):
         self.sample_weights = nn.Parameter(torch.Tensor(self.num_branches))
         self.register_buffer('counter', torch.zeros(1))
         self.register_buffer('current_search_step', torch.zeros(1))
-        self.register_buffer('rates', torch.ones(size=(3, 2), dtype=torch.int32))
+        self.register_buffer('rates', torch.ones(
+            size=(self.num_branches, 2), dtype=torch.int32))
         self.register_buffer('num_rates', torch.ones(1, dtype=torch.int32))
         self.rates[0] = torch.FloatTensor([self.dilation[0], self.dilation[1]])
-        self.sample_weights.data.fill_(self.init_weight)   
+        self.sample_weights.data.fill_(self.init_weight)
 
         # rf-next
         if pretrained is not None:
@@ -162,14 +160,14 @@ class RFConv2d(nn.Conv2d):
             self.estimate()
             self.expand()
             # re-initilize the sample_weights
-            self.sample_weights.data.fill_(self.init_weight)     
+            self.sample_weights.data.fill_(self.init_weight)
             self.max_search_step = 0
         elif self.rf_mode == 'rfmerge':
             self.max_search_step = 0
             self.sample_weights.requires_grad = False
         else:
             raise NotImplementedError()
-        
+
         if self.rf_mode in ['rfsingle', 'rfmerge']:
             assert self.num_rates.item() == 1
 
@@ -195,7 +193,8 @@ class RFConv2d(nn.Conv2d):
         else:
             norm_w = self.normlize(self.sample_weights[:self.num_rates.item()])
             xx = [
-                self._conv_forward_dilation(x, (self.rates[i][0].item(), self.rates[i][1].item()))
+                self._conv_forward_dilation(
+                    x, (self.rates[i][0].item(), self.rates[i][1].item()))
                 * norm_w[i] for i in range(self.num_rates.item())
             ]
         x = xx[0]
@@ -212,14 +211,14 @@ class RFConv2d(nn.Conv2d):
             self.current_search_step += 1
             self.estimate()
             self.expand()
-    
+
     def tensor_to_tuple(self, tensor):
         return tuple([(x[0].item(), x[1].item()) for x in tensor])
-    
+
     def estimate(self):
         norm_w = self.normlize(self.sample_weights[:self.num_rates.item()])
         print('Estimate dilation {} with weight {}.'.format(
-            self.tensor_to_tuple(self.rates), norm_w.detach().cpu().numpy().tolist()))
+            self.tensor_to_tuple(self.rates[:self.num_rates.item()]), norm_w.detach().cpu().numpy().tolist()))
 
         sum0, sum1, w_sum = 0, 0, 0
         for i in range(self.num_rates.item()):
@@ -244,11 +243,11 @@ class RFConv2d(nn.Conv2d):
 
     def expand(self):
         rates = rf_expand(self.dilation, self.expand_rate,
-                    self.num_branches, 
-                    min_dilation=self.min_dilation, 
-                    max_dilation=self.max_dilation)
+                          self.num_branches,
+                          min_dilation=self.min_dilation,
+                          max_dilation=self.max_dilation)
         for i, rate in enumerate(rates):
             self.rates[i] = torch.FloatTensor([rate[0], rate[1]])
         self.num_rates[0] = len(rates)
-        self.sample_weights.data.fill_(self.init_weight)     
+        self.sample_weights.data.fill_(self.init_weight)
         print('Expand as {}'.format(self.rates[:len(rates)].cpu().tolist()))
